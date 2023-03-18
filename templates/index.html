@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Textvervollständigung</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Textvervollständigung</h1>
+        <select id="input_mode">
+            <option value="text" selected>Text</option>
+            <option value="code">Programmiercode</option>
+        </select>        
+        <div id="input_container">
+            <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-002"></textarea>
+            <span id="suggestion" class="suggestion"></span>
+        </div><br>
+        <div class="top-buttons">
+            <button id="complete_button" class="button-68">Regenerate</button>
+            <button id="copy_button" class="button-68">Kopieren</button>
+        </div>
+    </div>
+
+    <script>
+
+        var timeout;
+
+        function updateSuggestion() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function () {
+                var inputText = codeMirrorInstance ? codeMirrorInstance.getValue() : $("#input_text").val();
+                $.post('/complete', {input_text: inputText}, function(data) {
+                    if (data.completions.length > 0) {
+                        $("#suggestion").text(data.completions[0]);
+                    } else {
+                        $("#suggestion").text("");
+                    }
+                });
+            }, 500);
+        }
+
+        $("#input_text").on("input", updateSuggestion);
+
+        $(document).on("keydown", function(event) {
+            if (event.key === "Tab") {
+                event.preventDefault();
+                var suggestedText = $("#suggestion").text();
+                if (codeMirrorInstance) {
+                    codeMirrorInstance.replaceSelection(suggestedText);
+                } else {
+                    $("#input_text").val($("#input_text").val() + suggestedText);
+                }
+                $("#suggestion").text("");
+            }
+        });
+
+        $("#complete_button").click(updateSuggestion);
+
+        $("#copy_button").click(function() {
+            $("#input_text").select();
+            document.execCommand("copy");
+        });
+
+        var codeMirrorInstance;
+
+        function switchToText() {
+            if (codeMirrorInstance) {
+                var code = codeMirrorInstance.getValue();
+                codeMirrorInstance.toTextArea();
+                codeMirrorInstance = null;
+                $("#input_text").val(code);
+            }
+        }
+
+        function switchToCode() {
+            if (!codeMirrorInstance) {
+                codeMirrorInstance = CodeMirror.fromTextArea(document.getElementById("input_text"), {
+                    lineNumbers: true,
+                    mode: "text/plain"
+                });
+                codeMirrorInstance.on("change", function() {
+                    updateSuggestion();
+                });
+            }
+        }
+
+        $("#input_mode").on("change", function() {
+            var mode = $(this).val();
+            if (mode === "text") {
+                switchToText();
+            } else if (mode === "code") {
+                switchToCode();
+            }
+        });
+
+    </script>
+</body>
+</html>
