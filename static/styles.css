@@ -238,6 +238,51 @@ details ol {
     background-color: #45a049;
   }
   
+/* Header */
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+.menu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.menu li {
+    margin-right: 1rem;
+}
+
+.menu li:last-child {
+    margin-right: 0;
+}
+
+.menu a {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.menu a:hover {
+    color: #0095f6;
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 1000;
+}
 
 
 
