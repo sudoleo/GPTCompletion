@@ -3,10 +3,16 @@ import openai
 import re
 from spellchecker.spellchecker import SpellChecker
 
-# Ersetzen Sie YOUR_API_KEY durch Ihren tatsächlichen API-Schlüssel
-openai.api_key = "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"
-
 app = Flask(__name__)
+
+def set_api_key(api_key):
+    openai.api_key = api_key
+
+@app.route('/set-api-key', methods=['POST'])
+def set_api_key_route():
+    api_key = request.form['api_key']
+    set_api_key(api_key)
+    return {"status": "success"}
 
 @app.route('/')
 def index():
@@ -15,11 +21,15 @@ def index():
 @app.route('/complete', methods=['POST'])
 def complete():
     input_text = request.form['input_text']
-    completions = complete_text(input_text)
+    context_text = request.form.get('context_text', '')
+    completions = complete_text(input_text, context_text)
     misspellings = find_misspellings(input_text)
     return {'completions': completions, 'misspellings': misspellings}
 
-def complete_text(prompt, n=1):
+def complete_text(prompt, context_text='', n=1):
+    if context_text:
+        prompt = f"{context_text}\n{prompt}"
+    
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
@@ -36,6 +46,7 @@ def complete_text(prompt, n=1):
         completions.append(completion + '.')
 
     return completions
+
 
 def find_misspellings(text):
     spell = SpellChecker(language='de')

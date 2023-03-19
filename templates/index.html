@@ -7,14 +7,40 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
 </head>
 <body>
+    <div id="api-key-popup" class="popup-container">
+        <div class="popup">
+            <h3>OpenAI API Key eingeben</h3>
+            <input type="text" id="api-key-input" class="input-field" placeholder="Geben Sie Ihren API Key hier ein" />
+            <button id="save-api-key" class="save-btn">Speichern</button>
+            <details>
+                <summary>Wie erhalte ich einen OpenAI API Key?</summary>
+                <p>
+                    Um einen OpenAI API Key zu erhalten, müssen Sie die folgenden Schritte ausführen:
+                </p>
+                <ol>
+                    <li>Besuchen Sie die <a href="https://beta.openai.com/signup/" target="_blank">OpenAI-Registrierungsseite</a> und erstellen Sie ein Konto, falls Sie noch keines haben.</li>
+                    <li>Nachdem Sie sich angemeldet haben, navigieren Sie zur <a href="https://beta.openai.com/account/api-keys/" target="_blank">API Keys Seite</a>.</li>
+                    <li>Klicken Sie auf "Create API Key" und geben Sie einen Namen für den Schlüssel ein. Nachdem Sie den Schlüssel erstellt haben, wird er Ihnen angezeigt.</li>
+                    <li>Kopieren Sie den API-Schlüssel und fügen Sie ihn in das Eingabefeld oben ein.</li>
+                </ol>
+            </details>
+        </div>
+    </div>    
     <div class="container">
-        <h1>Textvervollständigung</h1>
-        <select id="input_mode">
-            <option value="text" selected>Text</option>
-            <option value="code">Programmiercode</option>
-        </select>        
+        <h3>Textvervollständigung</h3>
+        <div class="top-row">
+            <select id="input_mode">
+                <option value="text" selected>Text</option>
+                <option value="code">Code</option>
+            </select>
+            <button id="toggle_context" class="context-toggle">Kontextinformationen anzeigen</button>
+        </div>
+        <div class="context-container">
+            <textarea id="context_text" class="context-input" placeholder="Geben Sie hier Kontextinformationen ein, die bei der Vorhersage der Vorschläge berücksichtigt werden sollen.&#10;&#10;GPT-3.5-turbo (davinci 002) hat eine maximale Token-Grenze von 4096 Tokens. Ein Token kann ein Wort oder ein Teil eines Wortes sein. Es kann auch Leerzeichen, Zeilenumbrüche oder Satzzeichen umfassen." style="display: none;"></textarea>
+        </div>               
         <div id="input_container">
             <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-002"></textarea>
             <span id="suggestion" class="suggestion"></span>
@@ -33,7 +59,8 @@
             clearTimeout(timeout);
             timeout = setTimeout(function () {
                 var inputText = codeMirrorInstance ? codeMirrorInstance.getValue() : $("#input_text").val();
-                $.post('/complete', {input_text: inputText}, function(data) {
+                var contextText = $("#context_text").val();
+                $.post('/complete', {input_text: inputText, context_text: contextText}, function(data) {
                     if (data.completions.length > 0) {
                         $("#suggestion").text(data.completions[0]);
                     } else {
@@ -42,6 +69,7 @@
                 });
             }, 500);
         }
+
 
         $("#input_text").on("input", updateSuggestion);
 
@@ -96,6 +124,69 @@
                 switchToCode();
             }
         });
+
+        $("#toggle_context").click(function () {
+            var $contextText = $("#context_text");
+            if ($contextText.is(":visible")) {
+                $contextText.slideUp(400, "swing");
+                $(this).text("Kontextinformationen anzeigen");
+            } else {
+                $contextText.slideDown(400, "swing");
+                $(this).text("Kontextinformationen ausblenden");
+            }
+        });
+
+        function showAPIKeyPopup() {
+            $("#api-key-popup").show();
+        }
+
+        function hideAPIKeyPopup() {
+            $("#api-key-popup").hide();
+        }
+
+        function saveAPIKey() {
+            var apiKey = $("#api-key-input").val();
+            if (apiKey) {
+                localStorage.setItem("openai_api_key", apiKey);
+                $.post("/set-api-key", { api_key: apiKey }, function (data) {
+                    if (data.status === "success") {
+                        alert("API Key wurde erfolgreich gespeichert!");
+                        hideAPIKeyPopup();
+                    } else {
+                        alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+                    }
+                });
+            } else {
+                alert("Sie müssen einen API Key eingeben, um die App nutzen zu können.");
+            }
+        }
+
+        $("#save-api-key").click(saveAPIKey);
+
+
+        $(document).ready(function () {
+            var storedAPIKey = localStorage.getItem("openai_api_key");
+            if (!storedAPIKey) {
+                promptForAPIKey();
+            } else {
+                $.post("/set-api-key", { api_key: storedAPIKey });
+            }
+        });
+
+        $(document).ready(function () {
+            var apiKey = localStorage.getItem("openai_api_key");
+            if (!apiKey) {
+                showAPIKeyPopup();
+            } else {
+                $.post("/set-api-key", { api_key: apiKey }, function (data) {
+                    if (data.status !== "success") {
+                        alert("Ein Fehler ist aufgetreten. Bitte geben Sie Ihren API Key erneut ein.");
+                        showAPIKeyPopup();
+                    }
+                });
+            }
+        });
+
 
     </script>
 </body>
