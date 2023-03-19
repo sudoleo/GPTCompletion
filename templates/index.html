@@ -2,17 +2,18 @@
 <html lang="de">
     <head>
         <meta charset="UTF-8">
-        <title>Textvervollständigung</title>
+        <title>write along</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
     </head>
 <body>
     <header>
         <nav>
-            <a href="https://example.com" class="logo">My Logo</a>
+            <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
             <ul class="menu">
                 <li><a href="#home">Home</a></li>
                 <li><a href="#features">Features</a></li>
@@ -52,16 +53,15 @@
         <div class="context-container">
             <textarea id="context_text" class="context-input" placeholder="Geben Sie hier Kontextinformationen ein, die bei der Vorhersage der Vorschläge berücksichtigt werden sollen.&#10;&#10;GPT-3.5-turbo (davinci 002) hat eine maximale Token-Grenze von 4096 Tokens. Ein Token kann ein Wort oder ein Teil eines Wortes sein. Es kann auch Leerzeichen, Zeilenumbrüche oder Satzzeichen umfassen." style="display: none;"></textarea>
         </div>               
-        <div id="input_container">
+        <div id="input_container" class="input_container">
             <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-002"></textarea>
             <span id="suggestion" class="suggestion"></span>
         </div><br>
         <div class="top-buttons">
-            <button id="complete_button" class="button-68">Regenerate</button>
-            <button id="copy_button" class="button-68">Kopieren</button>
+            <button id="complete_button" class="context-toggle">Regenerate</button>
+            <button id="copy_button" class="context-toggle">Kopieren</button>
         </div>
     </div>
-
     <script>
 
         var timeout;
