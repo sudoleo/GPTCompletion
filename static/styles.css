@@ -276,3 +276,13 @@ nav {
     border-color: #56a5ec; /* Hauptfarbe aus Ihrem CSS-Code */
     box-shadow: 0 0 0 3px rgba(86, 165, 236, 0.3); /* Ring um den Container in der Hauptfarbe, wenn ein Element fokussiert ist */
 }
+
+.menu-button {
+    background: none!important;
+    border: none;
+    padding: 0!important;
+    /*optional*/
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 15px;
+    cursor: pointer;
+  }

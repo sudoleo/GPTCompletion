@@ -2,7 +2,7 @@
 <html lang="de">
     <head>
         <meta charset="UTF-8">
-        <title>write along</title>
+        <title>type on AI</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
@@ -15,10 +15,11 @@
         <nav>
             <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
             <ul class="menu">
-                <li><a href="#home">Home</a></li>
+                <li><a href="#home">Usecases</a></li>
                 <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">Pricing</a></li>
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#pricing">FAQs</a></li>
+                <li><a href="#contact">AI</a></li>
+                <li><button id="change-api-key" class="menu-button">API-Key ändern</button></li>
             </ul>
         </nav>
     </header>
@@ -46,7 +47,7 @@
         <div class="top-row">
             <select id="input_mode">
                 <option value="text" selected>Text</option>
-                <option value="code">Code</option>
+                <option value="code">Code &#040;BETA&#041;</option>
             </select>
             <button id="toggle_context" class="context-toggle">Kontextinformationen anzeigen</button>
         </div>
@@ -89,9 +90,17 @@
                 event.preventDefault();
                 var suggestedText = $("#suggestion").text();
                 if (codeMirrorInstance) {
+                    var currentText = codeMirrorInstance.getValue();
+                    if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
+                        suggestedText = ' ' + suggestedText;
+                    }
                     codeMirrorInstance.replaceSelection(suggestedText);
                 } else {
-                    $("#input_text").val($("#input_text").val() + suggestedText);
+                    var currentText = $("#input_text").val();
+                    if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
+                        suggestedText = ' ' + suggestedText;
+                    }
+                    $("#input_text").val(currentText + suggestedText);
                 }
                 $("#suggestion").text("");
             }
@@ -164,7 +173,8 @@
                         alert("API Key wurde erfolgreich gespeichert!");
                         hideAPIKeyPopup();
                     } else {
-                        alert("Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.");
+                        alert("Der eingegebene API-Key ist ungültig. Bitte geben Sie einen gültigen API-Key ein.");
+                        $("#api-key-input").val("");  // Reset the input field
                     }
                 });
             } else {
@@ -172,8 +182,15 @@
             }
         }
 
+
         $("#save-api-key").click(saveAPIKey);
 
+        function promptForAPIKey() {
+            $("#api-key-input").val("");  // Reset the input field
+            showAPIKeyPopup();
+        }
+
+        $("#change-api-key").click(promptForAPIKey);
 
         $(document).ready(function () {
             var storedAPIKey = localStorage.getItem("openai_api_key");

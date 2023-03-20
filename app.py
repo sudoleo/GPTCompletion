@@ -1,7 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import openai
 import re
-from spellchecker.spellchecker import SpellChecker
 
 app = Flask(__name__)
 
@@ -11,8 +10,11 @@ def set_api_key(api_key):
 @app.route('/set-api-key', methods=['POST'])
 def set_api_key_route():
     api_key = request.form['api_key']
-    set_api_key(api_key)
-    return {"status": "success"}
+    try:
+        set_api_key(api_key)
+        return {"status": "success"}
+    except openai.error.AuthenticationError:
+        return {"status": "error"}
 
 @app.route('/')
 def index():
@@ -23,8 +25,7 @@ def complete():
     input_text = request.form['input_text']
     context_text = request.form.get('context_text', '')
     completions = complete_text(input_text, context_text)
-    misspellings = find_misspellings(input_text)
-    return {'completions': completions, 'misspellings': misspellings}
+    return {'completions': completions}
 
 def complete_text(prompt, context_text='', n=1):
     if context_text:
@@ -33,7 +34,7 @@ def complete_text(prompt, context_text='', n=1):
     response = openai.Completion.create(
         engine="text-davinci-002",
         prompt=prompt,
-        max_tokens=50,
+        max_tokens=80,  # Set a higher max_tokens value to ensure you get a full sentence
         n=n,
         stop=None,
         temperature=0.7,
@@ -42,17 +43,11 @@ def complete_text(prompt, context_text='', n=1):
     completions = []
     for choice in response.choices:
         completion = choice.text.strip()
-        completion = re.split(r'[.!?]', completion)[0]
-        completions.append(completion + '.')
+        sentences = re.split(r'(?<=[.!?])\s+', completion)
+        first_sentence = sentences[0] if sentences else ''
+        completions.append(first_sentence.strip())
 
     return completions
-
-
-def find_misspellings(text):
-    spell = SpellChecker(language='de')
-    words = text.split()
-    misspelled = spell.unknown(words)
-    return ', '.join(misspelled)
 
 if __name__ == '__main__':
     app.run(debug=True)
