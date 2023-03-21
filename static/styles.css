@@ -5,19 +5,18 @@ body {
     font-family: 'Source Sans Pro', sans-serif; /* Schriftart aktualisiert */
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #f0f0f0;
     height: 800px;
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
     position: relative;
 }
 
-h1 {
-    text-align: center;
+h3 {
     color: #333;
     margin-bottom: 2rem;
 }
@@ -28,18 +27,9 @@ textarea {
     border: 1px solid #ccc;
     margin-bottom: 1rem;
     resize: vertical;
-    min-height: 450px; /* Ändern Sie den Wert für die gewünschte Größe */
+    min-height: 400px; /* Ändern Sie den Wert für die gewünschte Größe */
     font-family: 'Roboto', sans-serif; /* Schriftart hinzugefügt */
 }
-
-select {
-    width: 100%;
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 0.25rem;
-}
-
 
 select {
     width: 100%;
@@ -51,6 +41,8 @@ select {
     background-color: #f9f9f9;
     color: #333;
     margin-bottom: 1rem;
+    padding: 8px;
+    transition: border-color 0.3s;
 }
 
 .top-buttons {
@@ -64,10 +56,11 @@ select {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+    gap: 10px;
 }
 
 .context-toggle {
-    background-color: #0ECAFC; /* Hauptfarbe aktualisiert */
+    background-color: #239AFF; /* Hauptfarbe aktualisiert */
     border: none;
     color: white;
     text-align: center;
@@ -132,7 +125,7 @@ details ol {
 }
 
 .api-key-popup button {
-    background-color: #0ECAFC;
+    background-color: #239AFF;
     border: none;
     color: white;
     text-align: center;
@@ -147,7 +140,7 @@ details ol {
 }
 
 .api-key-popup button:hover {
-    background-color: #0ECAFC;
+    background-color: #239AFF;
 }
 
 .instructions-container {
@@ -180,7 +173,7 @@ details ol {
     width: 100%;
     padding: 8px 16px;
     font-size: 16px;
-    background-color: #4CAF50;
+    background-color: #239AFF;
     color: white;
     border: none;
     border-radius: 4px;
@@ -188,7 +181,7 @@ details ol {
   }
   
   .save-btn:hover {
-    background-color: #45a049;
+    background-color: #38a0fc;
   }
   
 /* Header */

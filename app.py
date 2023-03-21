@@ -24,20 +24,24 @@ def index():
 def complete():
     input_text = request.form['input_text']
     context_text = request.form.get('context_text', '')
-    completions = complete_text(input_text, context_text)
+    model = request.form.get('model', 'text-davinci-002')
+    max_tokens = int(request.form.get('max_tokens', 80))
+    temperature = float(request.form.get('temperature', 0.7))
+    completions = complete_text(input_text, context_text, model=model, max_tokens=max_tokens, temperature=temperature)
     return {'completions': completions}
 
-def complete_text(prompt, context_text='', n=1):
+
+def complete_text(prompt, context_text='', n=1, model="text-davinci-002", max_tokens=80, temperature=0.7):
     if context_text:
         prompt = f"{context_text}\n{prompt}"
     
     response = openai.Completion.create(
-        engine="text-davinci-002",
+        engine=model,
         prompt=prompt,
-        max_tokens=80,  # Set a higher max_tokens value to ensure you get a full sentence
+        max_tokens=max_tokens,
         n=n,
         stop=None,
-        temperature=0.7,
+        temperature=temperature,
     )
     
     completions = []

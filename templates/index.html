@@ -26,6 +26,7 @@
     <div id="api-key-popup" class="popup-container">
         <div class="popup">
             <h3>OpenAI API Key eingeben</h3>
+            <button id="close-popup" class="close-btn">&times;</button>
             <input type="text" id="api-key-input" class="input-field" placeholder="Geben Sie Ihren API Key hier ein" />
             <button id="save-api-key" class="save-btn">Speichern</button>
             <details>
@@ -43,13 +44,34 @@
         </div>
     </div>    
     <div class="container">
-        <h3>Textvervollständigung</h3>
+        <h3>Textvervollständigung mit "TAB"</h3><p>powered by AI</p>
         <div class="top-row">
             <select id="input_mode">
                 <option value="text" selected>Text</option>
                 <option value="code">Code &#040;BETA&#041;</option>
             </select>
-            <button id="toggle_context" class="context-toggle">Kontextinformationen anzeigen</button>
+            <select id="gpt_model">
+                <option value="text-davinci-002" selected>GPT-3.5-turbo</option>
+                <option value="text-curie-001">Curie</option>
+            </select>
+            <select id="max_tokens">
+                <option value="" disabled selected>Länge des Vorschlags</option>
+                <option value="4">4 Tokens</option>
+                <option value="20">20 Tokens</option>
+                <option value="40">40 Tokens</option>
+                <option value="80" selected>80 Tokens - ein Satz</option>
+                <option value="160">100 Tokens</option>
+                <option value="320">120 Tokens</option>
+            </select>
+            <select id="temperature">
+                <option value="" disabled selected>Kreativität des Vorschlags</option>
+                <option value="0.2">0.2 (Sehr konservativ)</option>
+                <option value="0.4">0.4 (Konservativ)</option>
+                <option value="0.7" selected>0.7 (Standard)</option>
+                <option value="1.0">1.0 (Kreativ)</option>
+                <option value="1.5">1.5 (Sehr kreativ)</option>
+            </select>            
+            <button id="toggle_context" class="context-toggle">Kontext hinzufügen</button>
         </div>
         <div class="context-container">
             <textarea id="context_text" class="context-input" placeholder="Geben Sie hier Kontextinformationen ein, die bei der Vorhersage der Vorschläge berücksichtigt werden sollen.&#10;&#10;GPT-3.5-turbo (davinci 002) hat eine maximale Token-Grenze von 4096 Tokens. Ein Token kann ein Wort oder ein Teil eines Wortes sein. Es kann auch Leerzeichen, Zeilenumbrüche oder Satzzeichen umfassen." style="display: none;"></textarea>
@@ -57,7 +79,7 @@
         <div id="input_container" class="input_container">
             <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-002"></textarea>
             <span id="suggestion" class="suggestion"></span>
-        </div><br>
+        </div>
         <div class="top-buttons">
             <button id="complete_button" class="context-toggle">Regenerate</button>
             <button id="copy_button" class="context-toggle">Kopieren</button>
@@ -72,7 +94,7 @@
             timeout = setTimeout(function () {
                 var inputText = codeMirrorInstance ? codeMirrorInstance.getValue() : $("#input_text").val();
                 var contextText = $("#context_text").val();
-                $.post('/complete', {input_text: inputText, context_text: contextText}, function(data) {
+                $.post('/complete', {input_text: inputText, context_text: contextText, ...getSettings()}, function(data) {
                     if (data.completions.length > 0) {
                         $("#suggestion").text(data.completions[0]);
                     } else {
@@ -81,7 +103,6 @@
                 });
             }, 500);
         }
-
 
         $("#input_text").on("input", updateSuggestion);
 
@@ -173,8 +194,8 @@
                         alert("API Key wurde erfolgreich gespeichert!");
                         hideAPIKeyPopup();
                     } else {
-                        alert("Der eingegebene API-Key ist ungültig. Bitte geben Sie einen gültigen API-Key ein.");
-                        $("#api-key-input").val("");  // Reset the input field
+                        alert("Der eingegebene API-Key ist ungültig. Bitte überprüfen Sie den API-Key und fordern Sie gegebenenfalls einen neuen an. Hinterlegen Sie anschließend den gültigen API-Key.");
+                        $("#api-key-input").val("");
                     }
                 });
             } else {
@@ -186,7 +207,7 @@
         $("#save-api-key").click(saveAPIKey);
 
         function promptForAPIKey() {
-            $("#api-key-input").val("");  // Reset the input field
+            $("#api-key-input").val("");
             showAPIKeyPopup();
         }
 
@@ -215,7 +236,18 @@
             }
         });
 
+        $("#close-popup").click(function () {
+            hideAPIKeyPopup();
+        });
 
+        function getSettings() {
+            return {
+                model: $("#gpt_model").val(),
+                max_tokens: parseInt($("#max_tokens").val(), 10),
+                temperature: parseFloat($("#temperature").val())
+            };
+        }
+        
     </script>
 </body>
 </html>
