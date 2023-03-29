@@ -20,6 +20,26 @@ def set_api_key_route():
 def index():
     return render_template('index.html')
 
+@app.route('/usecases')
+def usecases():
+    return render_template('usecases.html')
+
+@app.route('/features')
+def features():
+    return render_template('features.html')
+
+@app.route('/faqs')
+def faqs():
+    return render_template('faqs.html')
+
+@app.route('/ai')
+def ai():
+    return render_template('ai.html')
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
 @app.route('/complete', methods=['POST'])
 def complete():
     input_text = request.form['input_text']

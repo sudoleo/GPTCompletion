@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title>type on AI</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+    </head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
+            </a>
+            <ul class="menu">
+                <li><a href="{{ url_for('usecases') }}">Wie funktionierts?</a></li>
+                <li><a href="{{ url_for('features') }}">Was sind die Features?</a></li>
+                <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+                <li><a href="{{ url_for('ai') }}">AI</a></li>
+                <li style="position: relative;">
+                    <button id="change-api-key" class="menu-button" style="cursor: not-allowed; opacity: 0.6;" disabled>
+                      API-Key ändern
+                    </button>
+                    <span style="visibility: hidden; width: 250px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s;" title="Der API-Key kann nur auf der Hauptseite geändert werden">
+                    </span>
+                </li>  
+            </ul>
+        </nav>
+    </header>  
+    <div class="container">
+        <h2>Künstliche Intelligenz im Hintergrund</h2>
+        <p>
+            Die KI, die diese Textvervollständigungs-App antreibt, basiert auf modernen Technologien des maschinellen Lernens und neuronaler Netzwerke. Sie nutzt das leistungsstarke GPT-Modell (Generative Pre-trained Transformer), welches über Millionen von Textdaten und Kontexten trainiert wurde, um menschenähnliche Textvorhersagen zu generieren. Durch die Implementierung von fortschrittlichen Algorithmen zur Textverarbeitung und Mustererkennung kann die KI den eingegebenen Text analysieren, um eine kohärente und relevante Fortsetzung basierend auf dem Kontext, dem Schreibstil und der Themenvorgabe zu erstellen. Die KI-Technologie ermöglicht es der App, sowohl bei alltäglichen Texten als auch bei komplexen Programmieraufgaben eine hohe Genauigkeit und Effizienz zu erreichen. Die KI-Modelle werden kontinuierlich weiterentwickelt und optimiert, um den Benutzern stets die bestmöglichen Vorhersagen und Empfehlungen bieten zu können.
+        </p>
+        <img src="static/images/gpt3.png" alt="GPT3" style="width: 500px; height: auto;" />
+    </div>
+    <script>

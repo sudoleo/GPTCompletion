@@ -13,20 +13,22 @@
 <body>
     <header>
         <nav>
-            <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
+            </a>
             <ul class="menu">
-                <li><a href="#home">Usecases</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="#pricing">FAQs</a></li>
-                <li><a href="#contact">AI</a></li>
+                <li><a href="{{ url_for('usecases') }}">Wie funktionierts?</a></li>
+                <li><a href="{{ url_for('features') }}">Was sind die Features?</a></li>
+                <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+                <li><a href="{{ url_for('ai') }}">AI</a></li>
                 <li><button id="change-api-key" class="menu-button">API-Key ändern</button></li>
             </ul>
         </nav>
     </header>
     <div id="api-key-popup" class="popup-container">
         <div class="popup">
+            <button id="close-popup" class="close-btn" style="float: right;">&times;</button>
             <h3>OpenAI API Key eingeben</h3>
-            <button id="close-popup" class="close-btn">&times;</button>
             <input type="text" id="api-key-input" class="input-field" placeholder="Geben Sie Ihren API Key hier ein" />
             <button id="save-api-key" class="save-btn">Speichern</button>
             <details>
@@ -51,23 +53,23 @@
                 <option value="code">Code &#040;BETA&#041;</option>
             </select>
             <select id="gpt_model">
-                <option value="text-davinci-002" selected>GPT-3.5-turbo</option>
+                <option value="text-davinci-002" selected>GPT-3.5-turbo (Empfohlen)</option>
                 <option value="text-curie-001">Curie</option>
             </select>
             <select id="max_tokens">
                 <option value="" disabled selected>Länge des Vorschlags</option>
-                <option value="4">4 Tokens</option>
-                <option value="20">20 Tokens</option>
-                <option value="40">40 Tokens</option>
-                <option value="80" selected>80 Tokens - ein Satz</option>
-                <option value="160">100 Tokens</option>
-                <option value="320">120 Tokens</option>
+                <option value="4">4 Tokens (1-2 Wörter)</option>
+                <option value="20">20 Tokens (Sehr kurz)</option>
+                <option value="40">40 Tokens (Kurz)</option>
+                <option value="80" selected>80 Tokens (Empfohlen)</option>
+                <option value="160">100 Tokens (Lang)</option>
+                <option value="320">120 Tokens (Sehr lang)</option>
             </select>
             <select id="temperature">
                 <option value="" disabled selected>Kreativität des Vorschlags</option>
                 <option value="0.2">0.2 (Sehr konservativ)</option>
                 <option value="0.4">0.4 (Konservativ)</option>
-                <option value="0.7" selected>0.7 (Standard)</option>
+                <option value="0.7" selected>0.7 (Empfohlen)</option>
                 <option value="1.0">1.0 (Kreativ)</option>
                 <option value="1.5">1.5 (Sehr kreativ)</option>
             </select>            
@@ -170,10 +172,10 @@
             var $contextText = $("#context_text");
             if ($contextText.is(":visible")) {
                 $contextText.slideUp(400, "swing");
-                $(this).text("Kontextinformationen anzeigen");
+                $(this).text("Kontext hinzufügen");
             } else {
                 $contextText.slideDown(400, "swing");
-                $(this).text("Kontextinformationen ausblenden");
+                $(this).text("Kontext ausblenden");
             }
         });
 

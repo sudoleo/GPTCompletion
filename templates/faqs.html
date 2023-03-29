@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8">
+        <title>type on AI</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+        <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+    </head>
+<body>
+    <header>
+        <nav>
+            <a href="{{ url_for('home') }}">
+                <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
+            </a>
+            <ul class="menu">
+                <li><a href="{{ url_for('usecases') }}">Wie funktionierts?</a></li>
+                <li><a href="{{ url_for('features') }}">Was sind die Features?</a></li>
+                <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
+                <li><a href="{{ url_for('ai') }}">AI</a></li>
+                <li style="position: relative;">
+                    <button id="change-api-key" class="menu-button" style="cursor: not-allowed; opacity: 0.6;" disabled>
+                      API-Key ändern
+                    </button>
+                    <span style="visibility: hidden; width: 250px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s;" title="Der API-Key kann nur auf der Hauptseite geändert werden">
+                    </span>
+                </li>  
+            </ul>
+        </nav>
+    </header>  
+    <div class="container">
+        <h2>FAQ?!</h2>
+        <ol>
+            <li>
+                <strong>Frage:</strong> Wie intelligent ist diese KI wirklich?
+                <br><br>
+                <strong>Antwort:</strong> Die KI ist intelligent genug, um Ihre Texte und Codes zu vervollständigen, aber keine Sorge, sie plant (noch) nicht, die Weltherrschaft an sich zu reißen.<br><br><br>
+            </li>
+            <li>
+                <strong>Frage:</strong> Wenn ich meiner KI genug Kaffee gebe, schreibt sie dann meine Dissertation?
+                <br><br>
+                <strong>Antwort:</strong> Leider benötigt die KI keine Koffeinzufuhr. Sie kann Ihnen jedoch dabei helfen, den Schreibprozess zu beschleunigen. Aber vergessen Sie nicht, Ihre Arbeit am Ende selbst zu überprüfen, um sicherzustellen, dass alles wissenschaftlich fundiert ist!<br><br><br>
+            </li>
+            <li>
+                <strong>Frage:</strong> Kann die KI mir helfen, das perfekte Rezept für Schokoladenkuchen zu generieren?
+                <br><br>
+                <strong>Antwort:</strong> Obwohl die KI primär für Text- und Codevervollständigung entwickelt wurde, können Sie Ihr Glück versuchen, indem Sie den Kontext richtig angeben. Sie könnten vielleicht sogar das nächste preisgekrönte Schokoladenkuchenrezept entdecken!<br><br><br>
+            </li>
+            <li>
+                <strong>Frage:</strong> Was passiert, wenn ich der KI eine Frage zu einem Film stelle, der im Jahr 2023 erschienen ist?
+                <br><br>
+                <strong>Antwort:</strong> Die KI wurde bis September 2021 trainiert und ist daher nicht allwissend über Ereignisse oder Veröffentlichungen nach diesem Datum. Aber sie kann Ihnen sicherlich bei Fragen zu Filmen bis 2021 helfen!<br><br><br>
+            </li>
+            <li>
+                <strong>Frage:</strong> Ist das alles überhaupt legal? Wer hat die Nutzungsrechte des Textes?
+                <br><br>
+                <strong>Antwort:</strong> Gute Frage, nächste Frage? ...<br><br><br>
+            </li>
+            <li>
+                <strong>Frage:</strong> Bin ich cool?
+                <br><br>
+                <strong>Antwort:</strong> Nein!<br><br><br>
+            </li>
+        </ol>
+    </div>
+    <script>

@@ -33,7 +33,7 @@ textarea {
 
 select {
     width: 100%;
-    max-width: 300px; /* Setzen Sie die gewünschte maximale Breite für das Dropdown-Menü */
+    max-width: 170px; /* Setzen Sie die gewünschte maximale Breite für das Dropdown-Menü */
     padding: 0.5rem;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -43,6 +43,7 @@ select {
     margin-bottom: 1rem;
     padding: 8px;
     transition: border-color 0.3s;
+    margin: auto;
 }
 
 .top-buttons {
@@ -57,6 +58,7 @@ select {
     align-items: center;
     margin-bottom: 10px;
     gap: 10px;
+
 }
 
 .context-toggle {
@@ -71,6 +73,7 @@ select {
     cursor: pointer;
     padding: 10px 24px;
     border-radius: 12px;
+    
 }
 
 details {
