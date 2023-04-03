@@ -97,13 +97,15 @@
                 var inputText = codeMirrorInstance ? codeMirrorInstance.getValue() : $("#input_text").val();
                 var contextText = $("#context_text").val();
                 $.post('/complete', {input_text: inputText, context_text: contextText, ...getSettings()}, function(data) {
-                    if (data.completions.length > 0) {
+                    if (data.error) {
+                        alert(data.error);
+                    } else if (data.completions.length > 0) {
                         $("#suggestion").text(data.completions[0]);
                     } else {
                         $("#suggestion").text("");
                     }
                 });
-            }, 500);
+            }, 1500);
         }
 
         $("#input_text").on("input", updateSuggestion);

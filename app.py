@@ -47,9 +47,13 @@ def complete():
     model = request.form.get('model', 'text-davinci-002')
     max_tokens = int(request.form.get('max_tokens', 80))
     temperature = float(request.form.get('temperature', 0.7))
-    completions = complete_text(input_text, context_text, model=model, max_tokens=max_tokens, temperature=temperature)
-    return {'completions': completions}
-
+    try:
+        completions = complete_text(input_text, context_text, model=model, max_tokens=max_tokens, temperature=temperature)
+        return {'completions': completions}
+    except openai.error.RateLimitError as e:
+        return {'error': str(e)}
+    except openai.error.AuthenticationError as e:
+        return {'error': str(e)}
 
 def complete_text(prompt, context_text='', n=1, model="text-davinci-002", max_tokens=80, temperature=0.7):
     if context_text:
