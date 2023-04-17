@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 <body>
     <header>
@@ -16,14 +17,14 @@
             <a href="{{ url_for('home') }}">
                 <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
             </a>
-            <ul class="menu">
-                <li><a href="{{ url_for('usecases') }}">Wie funktionierts?</a></li>
-                <li><a href="{{ url_for('features') }}">Was sind die Features?</a></li>
+            <ul class="menu desktop-menu">
+                <li><a href="{{ url_for('usecases') }}">Funktionalität</a></li>
+                <li><a href="{{ url_for('features') }}">Features</a></li>
                 <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
                 <li><a href="{{ url_for('ai') }}">AI</a></li>
                 <li style="position: relative;">
                     <button id="change-api-key" class="menu-button" style="cursor: not-allowed; opacity: 0.6;" disabled>
-                      API-Key ändern
+                      API-Key
                     </button>
                     <span style="visibility: hidden; width: 250px; background-color: #555; color: #fff; text-align: center; border-radius: 6px; padding: 5px; position: absolute; z-index: 1; bottom: 125%; left: 50%; margin-left: -125px; opacity: 0; transition: opacity 0.3s;" title="Der API-Key kann nur auf der Hauptseite geändert werden">
                     </span>

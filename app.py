@@ -44,7 +44,7 @@ def home():
 def complete():
     input_text = request.form['input_text']
     context_text = request.form.get('context_text', '')
-    model = request.form.get('model', 'text-davinci-002')
+    model = request.form.get('model', 'text-davinci-003')
     max_tokens = int(request.form.get('max_tokens', 80))
     temperature = float(request.form.get('temperature', 0.7))
     try:
@@ -55,7 +55,7 @@ def complete():
     except openai.error.AuthenticationError as e:
         return {'error': str(e)}
 
-def complete_text(prompt, context_text='', n=1, model="text-davinci-002", max_tokens=80, temperature=0.7):
+def complete_text(prompt, context_text='', n=1, model="text-davinci-003", max_tokens=80, temperature=0.7):
     if context_text:
         prompt = f"{context_text}\n{prompt}"
     

@@ -9,6 +9,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.0/codemirror.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
 <body>
     <header>
@@ -16,14 +17,14 @@
             <a href="{{ url_for('home') }}">
                 <img src="{{ url_for('static', filename='images/writealong.png') }}" class="logo" id="small-logo">
             </a>
-            <ul class="menu">
-                <li><a href="{{ url_for('usecases') }}">Wie funktionierts?</a></li>
-                <li><a href="{{ url_for('features') }}">Was sind die Features?</a></li>
+            <ul class="menu desktop-menu">
+                <li><a href="{{ url_for('usecases') }}">Funktionalität</a></li>
+                <li><a href="{{ url_for('features') }}">Features</a></li>
                 <li><a href="{{ url_for('faqs') }}">FAQs</a></li>
                 <li><a href="{{ url_for('ai') }}">AI</a></li>
-                <li><button id="change-api-key" class="menu-button">API-Key ändern</button></li>
+                <li><button id="change-api-key" class="menu-button">API-Key</button></li>
             </ul>
-        </nav>
+        </header>
     </header>
     <div id="api-key-popup" class="popup-container">
         <div class="popup">
@@ -53,7 +54,7 @@
                 <option value="code">Code &#040;BETA&#041;</option>
             </select>
             <select id="gpt_model">
-                <option value="text-davinci-002" selected>GPT-3.5-turbo (Empfohlen)</option>
+                <option value="text-davinci-003" selected>GPT-3.5-turbo (Empfohlen)</option>
                 <option value="text-curie-001">Curie</option>
             </select>
             <select id="max_tokens">
@@ -76,14 +77,15 @@
             <button id="toggle_context" class="context-toggle">Kontext hinzufügen</button>
         </div>
         <div class="context-container">
-            <textarea id="context_text" class="context-input" placeholder="Geben Sie hier Kontextinformationen ein, die bei der Vorhersage der Vorschläge berücksichtigt werden sollen.&#10;&#10;GPT-3.5-turbo (davinci 002) hat eine maximale Token-Grenze von 4096 Tokens. Ein Token kann ein Wort oder ein Teil eines Wortes sein. Es kann auch Leerzeichen, Zeilenumbrüche oder Satzzeichen umfassen." style="display: none;"></textarea>
+            <textarea id="context_text" class="context-input" placeholder="Geben Sie hier Kontextinformationen ein, die bei der Vorhersage der Vorschläge berücksichtigt werden sollen.&#10;&#10;GPT-3.5 (davinci 003) hat eine maximale Token-Grenze von 4096 Tokens. Ein Token kann ein Wort oder ein Teil eines Wortes sein. Es kann auch Leerzeichen, Zeilenumbrüche oder Satzzeichen umfassen." style="display: none;"></textarea>
         </div>               
         <div id="input_container" class="input_container">
-            <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-002"></textarea>
+            <textarea id="input_text" placeholder="Geben Sie hier Ihren Text ein!&#10;&#10;Vervollständigen Sie ihren Text mit TAB&#10;&#10;&#10;Powered by GPT 3.5 - text-davinci-003"></textarea>
             <span id="suggestion" class="suggestion"></span>
         </div>
         <div class="top-buttons">
-            <button id="complete_button" class="context-toggle">Regenerate</button>
+            <button id="autocomplete-btn" class="context-toggle">Vervollständigen</button>
+            <button id="complete_button" class="context-toggle">Verbessern</button>
             <button id="copy_button" class="context-toggle">Kopieren</button>
         </div>
     </div>
@@ -110,24 +112,30 @@
 
         $("#input_text").on("input", updateSuggestion);
 
+        function autocomplete() {
+            var suggestedText = $("#suggestion").text();
+            if (codeMirrorInstance) {
+                var currentText = codeMirrorInstance.getValue();
+                if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
+                    suggestedText = ' ' + suggestedText;
+                }
+                codeMirrorInstance.replaceSelection(suggestedText);
+            } else {
+                var currentText = $("#input_text").val();
+                if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
+                    suggestedText = ' ' + suggestedText;
+                }
+                $("#input_text").val(currentText + suggestedText);
+            }
+            $("#suggestion").text("");
+        }
+
+        document.getElementById('autocomplete-btn').addEventListener('click', autocomplete);
+
         $(document).on("keydown", function(event) {
             if (event.key === "Tab") {
                 event.preventDefault();
-                var suggestedText = $("#suggestion").text();
-                if (codeMirrorInstance) {
-                    var currentText = codeMirrorInstance.getValue();
-                    if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
-                        suggestedText = ' ' + suggestedText;
-                    }
-                    codeMirrorInstance.replaceSelection(suggestedText);
-                } else {
-                    var currentText = $("#input_text").val();
-                    if (!currentText.endsWith(' ') && !suggestedText.startsWith('.') && !suggestedText.startsWith(',')) {
-                        suggestedText = ' ' + suggestedText;
-                    }
-                    $("#input_text").val(currentText + suggestedText);
-                }
-                $("#suggestion").text("");
+                autocomplete();
             }
         });
 

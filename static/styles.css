@@ -1,6 +1,7 @@
 /* Importieren Sie die Schriftart "Source Sans Pro" */
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
 
+
 body {
     font-family: 'Source Sans Pro', sans-serif; /* Schriftart aktualisiert */
     margin: 0;
@@ -256,8 +257,6 @@ nav {
     box-shadow: 0 0 0 3px rgba(86, 165, 236, 0.3); /* Ring um den Container in der Hauptfarbe, wenn ein Element fokussiert ist */
 }
 
-
-
 .context-input {
     border: 1px solid #ccc;
     border-radius: 8px; /* Ecken abrunden */
@@ -282,3 +281,73 @@ nav {
     font-size: 15px;
     cursor: pointer;
   }
+  
+  
+/* Desktop */
+@media (min-width: 769px) {
+    .desktop-menu {
+      display: flex;
+    }
+  
+    .mobile-menu {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+
+  .top-row {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  select {
+    max-width: 100%;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  
+  .mobile-menu {
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    width: 100%;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+}
+
+@media (max-width: 480px) {
+  .api-key-popup input {
+    font-size: 0.875rem;
+  }
+
+  .api-key-popup button {
+    font-size: 14px;
+    padding: 8px 20px;
+  }
+
+  .input-field {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .save-btn {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
